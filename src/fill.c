@@ -6,11 +6,12 @@
 /*   By: jiwok <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/29 12:12:10 by jiwok             #+#    #+#             */
-/*   Updated: 2019/07/29 13:55:31 by jiwok            ###   ########.fr       */
+/*   Updated: 2019/07/29 14:46:41 by jiwok            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "funcs.h"
 
 void	print_size_map(int map[4][8], int nrows, int ncols)
 {
@@ -41,33 +42,49 @@ int		find_smallest(int i, int j, int k)
 		return (k);
 }
 
-void	size_map(char map[4][8], char *defs, int nrows, int ncols)
+int		check_neighbours(int row, int col, int i, int j, int k)
+{
+	if (row == 0 || col == 0)
+		return (1);
+	else
+		return 1 + find_smallest(i, j, k);
+}
+
+void	update_struct(sqre *a, int i, int j, int size)
+{
+	a->i = i;
+	a->j = j;
+	a->size = size;
+}
+
+sqre	size_map(char map[4][8], char *defs, int nrows, int ncols)
 {
 	int		i;
 	int		j;
 	int		sizemap[nrows][ncols];
+	sqre	a;
 
 	i = 0;
+	update_struct(&a, 0, 0, 1);
 	while (i < nrows)
 	{
 		j = 0;
 		while (j < ncols)
 		{
 			if (map[i][j] == defs[0])
-			{
-		 		if (i == 0 || j == 0)
-					sizemap[i][j] = 1;
-				else
-					sizemap[i][j] = 1 + find_smallest(sizemap[i][j - 1],
-							sizemap[i - 1][j], sizemap[i - 1][j - 1]);
-			}
+				sizemap[i][j] = check_neighbours(i, j, sizemap[i][j - 1], sizemap[i - 1][j],
+						sizemap[i - 1][j - 1]);
 			else if (map[i][j] == defs[1])
 				sizemap[i][j] = 0;
+			if (sizemap[i][j] > a.size)
+				update_struct(&a, i, j, sizemap[i][j]);
 			j += 1;
 		}
 		i += 1;
 	}
 	print_size_map(sizemap, nrows, ncols);
+	printf("size of bq square is %i. location is %i,%i\n", a.size, a.i, a.j);
+	return (a);
 }
 
 int		main(void)
