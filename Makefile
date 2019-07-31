@@ -6,15 +6,14 @@
 #    By: kaokeefe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 13:34:36 by kaokeefe          #+#    #+#              #
-#    Updated: 2019/07/30 18:44:06 by jiwok            ###   ########.fr        #
+#    Updated: 2019/07/31 06:19:51 by jiwok            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = bsq
-SRC = src/main.c src/fill.c src/ft_atoi.c
-HEADER = src/funcs.h
-COMPHEADER = src/funcs.h.gch
-OBJ = main.o ft_atoi.o fill.o
+SRC = src/main.c src/fill.c src/ft_atoi.c src/ft_read_input.c
+HEADER = -I includes/
+OBJ = main.o ft_atoi.o fill.o ft_read_input.o
 
 all: compile
 	@gcc -o $(NAME) $(OBJ)
@@ -23,7 +22,7 @@ compile:
 	@gcc -c -Wall -Werror -Wextra $(SRC) $(HEADER)
 
 clean:
-	@rm -f $(OBJ) $(COMPHEADER)
+	@rm -f $(OBJ)
 
 fclean: clean
 	@rm -f $(NAME)

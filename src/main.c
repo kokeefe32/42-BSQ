@@ -15,26 +15,15 @@
 #include <stdlib.h>
 #include "funcs.h"
 
-int    ft_map_error(void)
-{
-    write(2, "map error\n", 11);
-    return (0);
-}
-
-int    ft_assign_elements(char *filename, char **arr, int ncols, char *defs)
+int    ft_assign_elements(int fd, char **arr, int ncols, char *defs)
 {
     int     i;
     int     j;
-    int     fd;
     int     emptybox;
-    char    ch;
     char    buf[ncols + 2];
 
     i = 0;
-    fd = open(filename, O_RDONLY);
-    while (read(fd, &ch, 1) > 0)
-        if (ch == '\n')
-            break;
+    emptybox = 0;
     while (read(fd, buf, ncols + 1) > 0) 
     {
         j = 0;
@@ -43,18 +32,17 @@ int    ft_assign_elements(char *filename, char **arr, int ncols, char *defs)
             if (emptybox != 1 && (buf[j] == defs[0]))
                 emptybox = 1;
             else if (buf[j] != defs[0] && buf[j] != defs[1])
-                return (ft_map_error());
+                return (0);
             arr[i][j] = buf[j];
             j += 1;
         }
         if (buf[j] != '\n')
-            return (ft_map_error());
+            return (0);
         i++;
     }
     if (emptybox != 1)
-        return (ft_map_error());
-    close(fd);
-    return (1);
+        return (0);
+    return (i);
 }
 
 mem     ft_demystify2(int fd, int nrows, int *ncols)
@@ -107,42 +95,48 @@ void    ft_demystify1(int fd, int *nrows, char *defs)
     }
 }
 
-void    check_new_line(int *i, int argc)
+void    execute(char *filename)
 {
-    if (*i != (argc - 1))
-        write(1, "\n", 1);
-    *i += 1;
+    int     fd;
+    int     nrows;
+    int     ncols;
+    int     i;
+    char    ch;
+    char    defs[3];
+    mem     a;
+	
+    fd = open(filename, O_RDONLY); 
+    if (fd == -1)
+        return ;
+    ft_demystify1(fd, &nrows, defs);
+    a = ft_demystify2(fd, nrows, &ncols);
+    close(fd);
+    fd = open(filename, O_RDONLY);
+    while (read(fd, &ch, 1) > 0)
+        if (ch == '\n')
+            break;
+    i = ft_assign_elements(fd, a.arr, ncols, defs);
+    if (!i || i != nrows)
+        write(2, "map error\n", 11);
+    else
+        size_map(a, defs, nrows, ncols);
+    close(fd);
+    free(a.arr);
+    free(a.sizearr);
 }
 
 int		main(int argc, char **argv)
 {
-	int     i;
-	int     fd;
-    int     nrows;
-    int     ncols;
-    char    defs[3];
-    mem     a;
+	int i;
 
-	i = 1;
-	while (i < argc)
-	{
-		fd = open(argv[i], O_RDONLY); 
-        if (fd == -1)
-        {
-            check_new_line(&i, argc);
-            continue ;
-        }
-        ft_demystify1(fd, &nrows, defs);
-        a = ft_demystify2(fd, nrows, &ncols);
-        close(fd);
-        if (!ft_assign_elements(argv[i], a.arr, ncols, defs))
-        {
-            check_new_line(&i, argc);
-            continue ;
-        }
-        size_map(a, defs, nrows, ncols);
-        free(a.arr);
-        free(a.sizearr);
-        check_new_line(&i, argc);
-	}
+    if (argc == 1 && ft_read_input())
+        execute("filefromstdin.txt");
+    i = 1;
+    while (i < argc)
+    {
+        execute(argv[i]);
+        if (i != (argc - 1))
+            write(1, "\n", 1);
+        i += 1;
+    }
 }
