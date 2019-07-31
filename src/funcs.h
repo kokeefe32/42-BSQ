@@ -20,5 +20,6 @@ typedef struct {
 } sqre;
 
 int		ft_atoi(char *str);
+sqre	size_map(char **map, char *defs, int nrows, int ncols);
 
 #endif

@@ -13,10 +13,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include "funcs.h"
 
-void    ft_assign_elements(char *filename, char **arr, int ncols, int nrows)
+void    ft_assign_elements(char *filename, char **arr, int ncols)
 {
     int     i;
     int     j;
@@ -113,7 +112,9 @@ int		main(int argc, char **argv)
         ft_demystify1(fd, &nrows, defs);
         arr = ft_demystify2(fd, nrows, &ncols);
         close(fd);
-        ft_assign_elements(argv[i], arr, ncols, nrows);
+        ft_assign_elements(argv[i], arr, ncols);
+        size_map(arr, defs, nrows, ncols);
+        free(arr);
 		write(1, "\n", 1);
 		i++;
 	}
