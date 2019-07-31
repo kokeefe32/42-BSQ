@@ -14,12 +14,17 @@
 # define FUNCS_H
 
 typedef struct {
-	int i;
-	int j;
-	int size;
-} sqre;
+	int		i;
+	int		j;
+	int		size;
+}			sqre;
 
-int		ft_atoi(char *str);
-sqre	size_map(char **map, char *defs, int nrows, int ncols);
+typedef struct {
+	char	**arr;
+	int		**sizearr;
+}			mem;
+
+int			ft_atoi(char *str);
+sqre		size_map(mem a, char *defs, int nrows, int ncols);
 
 #endif
