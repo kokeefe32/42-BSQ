@@ -6,21 +6,21 @@
 /*   By: jiwok <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 05:38:43 by jiwok             #+#    #+#             */
-/*   Updated: 2019/07/31 05:38:45 by jiwok            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:28:17 by jiwok            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <fcntl.h>
 
-int		ft_read_input()
+int		ft_read_input(void)
 {
 	char	ch;
 	int		fd;
 
 	fd = open("filefromstdin.txt", O_WRONLY | O_CREAT | O_TRUNC);
-    if (fd == -1)
-        return (0);
+	if (fd == -1)
+		return (0);
 	while (read(0, &ch, 1) == 1)
 		write(fd, &ch, 1);
 	close(fd);

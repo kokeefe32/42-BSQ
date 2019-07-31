@@ -6,7 +6,7 @@
 #    By: kaokeefe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/28 13:34:36 by kaokeefe          #+#    #+#              #
-#    Updated: 2019/07/31 06:19:51 by jiwok            ###   ########.fr        #
+#    Updated: 2019/07/31 14:23:51 by jiwok            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ compile:
 	@gcc -c -Wall -Werror -Wextra $(SRC) $(HEADER)
 
 clean:
-	@rm -f $(OBJ)
+	@rm -f $(OBJ) filefromstdin.txt
 
 fclean: clean
 	@rm -f $(NAME)
